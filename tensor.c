@@ -132,47 +132,81 @@ void fiberstotensors(tensorfield* T)
     printf("Averagetensors. Time taken: %lf \n",runtime);
 }*/
 
-void simple_averagetensors(cube c,tensorfield* T)
+void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
 {
     double lambda=-1.0;  //store negative lambda
-    //M->tensor = (double*)calloc(6*M->numtet,sizeof(double));
-    //nonzeroes on main diagonal
-    // +3: (1,2) , (2,1)
-    // +4: (1,3) , (3,1)
-    // +5: (2,3) , (3,2)
-    //double start=omp_get_wtime();
+    int i, j, k;
+    double delta_x, delta_y, delta_z;
 
-    //#pragma omp parallel for
-    /*for(int i=0; i<M->numtet; i++)
+    double x_step = (3 - 1)/(double)x;
+    double y_step = (2 - 1)/(double)y;
+    double z_step = (5 - 4)/(double)z;
+
+    double *grid_x = (double*)calloc(x+2, sizeof(double));
+    double *grid_y = (double*)calloc(y+2, sizeof(double));
+    double *grid_z = (double*)calloc(z+2, sizeof(double));
+
+    for(i = 1; i <= x+1; i++)
     {
-        double norm=0.0;
-        for(int j=0; j<T->numtensor; j++)
+      grid_x[i] = 1 + x_step*(i-1);
+    }
+
+    for(i = 1; i <= y+1; i++)
+    {
+      grid_y[i] = 1 + y_step*(i-1);
+    }
+
+    for(i = 1; i <= z+1; i++)
+    {
+      grid_z[i] = 4 + z_step*(i-1);
+    }
+
+    for(i = 1; i <= z+1; i++)
+    {
+      for(j = 1; j <= y+1; j++)
+      {
+        for(k = 1; k <= x+1; k++)
         {
-            double d=
-(M->centroid[i*3+0]-T->coord[j*3+0])*(M->centroid[i*3+0]-T->coord[j*3+0])+
-(M->centroid[i*3+1]-T->coord[j*3+1])*(M->centroid[i*3+1]-T->coord[j*3+1])+
-(M->centroid[i*3+2]-T->coord[j*3+2])*(M->centroid[i*3+2]-T->coord[j*3+2]);
-            double e=exp(lambda*d);
-            norm+=e;
-            M->tensor[6*i+0]+=T->inputtensor[6*j+0]*e;
-            M->tensor[6*i+1]+=T->inputtensor[6*j+1]*e;
-            M->tensor[6*i+2]+=T->inputtensor[6*j+2]*e;
-            M->tensor[6*i+3]+=T->inputtensor[6*j+3]*e;
-            M->tensor[6*i+4]+=T->inputtensor[6*j+4]*e;
-            M->tensor[6*i+5]+=T->inputtensor[6*j+5]*e;
+
+            if((c.u_old[i-1][j][k] != 0 && c.u_old[i+1][j][k] != 0) &&
+            (c.u_old[i][j-1][k] != 0 && c.u_old[i][j+1][k] != 0) &&
+            (c.u_old[i][j][k-1] != 0 && c.u_old[i][j][k+1] != 0) &&
+            c.u_old[i][j][k] != 0)
+            {
+              double norm=0.0;
+              for(int j=0; j<T->numtensor; j++)
+              {
+                  double d=
+                    (M->centroid[i*3+0]-T->coord[j*3+0])*(M->centroid[i*3+0]-T->coord[j*3+0])+
+                    (M->centroid[i*3+1]-T->coord[j*3+1])*(M->centroid[i*3+1]-T->coord[j*3+1])+
+                    (M->centroid[i*3+2]-T->coord[j*3+2])*(M->centroid[i*3+2]-T->coord[j*3+2]);
+
+                double e=exp(lambda*d);
+                norm+=e;
+                M->tensor[6*i+0]+=T->inputtensor[6*j+0]*e;
+                M->tensor[6*i+1]+=T->inputtensor[6*j+1]*e;
+                M->tensor[6*i+2]+=T->inputtensor[6*j+2]*e;
+                M->tensor[6*i+3]+=T->inputtensor[6*j+3]*e;
+                M->tensor[6*i+4]+=T->inputtensor[6*j+4]*e;
+                M->tensor[6*i+5]+=T->inputtensor[6*j+5]*e;
+              }
+
+              M->tensor[6*i+0]/=norm;
+              M->tensor[6*i+1]/=norm;
+              M->tensor[6*i+2]/=norm;
+              M->tensor[6*i+3]/=norm;
+              M->tensor[6*i+4]/=norm;
+              M->tensor[6*i+5]/=norm;
+            }
+            else
+            {
+              c.tensor_x0[i][j][k] = 0.0;
+              c.tensor_y0[i][j][k] = 0.0;
+              c.tensor_z0[i][j][k] = 0.0;
+            }
         }
-
-        M->tensor[6*i+0]/=norm;
-        M->tensor[6*i+1]/=norm;
-        M->tensor[6*i+2]/=norm;
-        M->tensor[6*i+3]/=norm;
-        M->tensor[6*i+4]/=norm;
-        M->tensor[6*i+5]/=norm;
-
-        //printf("%d : %e %e %e  %e %e %e \n",i,M->tensor[6*i+0],M->tensor[6*i+1],M->tensor[6*i+2],M->tensor[6*i+3],M->tensor[6*i+4],M->tensor[6*i+5]);
-    }*/
-    //double runtime=omp_get_wtime()-start;
-    //printf("Averagetensors. Time taken: %lf \n",runtime);
+      }
+    }
 }
 
 /*tensorfield *T = (tensorfield *)malloc(sizeof(tensorfield));

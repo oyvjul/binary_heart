@@ -16,4 +16,4 @@ typedef struct {
 
 void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip);
 void fiberstotensors(tensorfield* T);
-void simple_averagetensors(cube c,tensorfield* T);
+void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z);
