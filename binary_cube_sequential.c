@@ -175,12 +175,19 @@ int main(int argc, char *argv[])
   int count_inside_tensor, count_outside_tensor;
   int i, j, k;
   cube c;
+  tensorfield *T = (tensorfield *)malloc(sizeof(tensorfield));
+  //char tensorfile[100] = "mesh_new/3Dheart.1";
+  //char *tensorfiledsadas;
+
 
 
   init_meshdata(&c, x, y, z);
   read_meshdata(c.u_old, x, y, z);
+  sparse_readtensorfiles("mesh_new/3Dheart.1", T, 1000);
+  fiberstotensors(T);
+  simple_averagetensors(c, T, x, y, z);
   //init_tensor(c.u_old, c.tensor_x1, c.tensor_y1, c.tensor_z1, x, y, z);
-  init_tensor(c, x, y, z);
+  //init_tensor(c, x, y, z);
 
   for(i = 1; i <= z+1; i++)
   {
@@ -246,6 +253,6 @@ int main(int argc, char *argv[])
 
   printf("DEBUG: \n");
   printf("U_OLD: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside, count_outside, l2_uold);
-  printf("TENSOR: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside_tensor, count_outside_tensor, l2_tensor);
+  //printf("TENSOR: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside_tensor, count_outside_tensor, l2_tensor);
   return 0;
 }

@@ -3,6 +3,10 @@
 #include <string.h>
 #include <math.h>
 #include "tensor.h"
+#include "binary_cube_sequential.h"
+
+const double SIGMA_l =  1.21321;
+const double SIGMA_t =  0.2121;
 
 void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip)
 {
@@ -135,7 +139,8 @@ void fiberstotensors(tensorfield* T)
 void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
 {
     double lambda=-1.0;  //store negative lambda
-    int i, j, k;
+    int i, j, k, l;
+    double d, e, norm;
     double delta_x, delta_y, delta_z;
 
     double x_step = (3 - 1)/(double)x;
@@ -173,36 +178,40 @@ void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
             (c.u_old[i][j][k-1] != 0 && c.u_old[i][j][k+1] != 0) &&
             c.u_old[i][j][k] != 0)
             {
-              double norm=0.0;
-              for(int j=0; j<T->numtensor; j++)
+              norm = 0.0;
+              //for(l = 0; l < T->numtensor; l++)
+              for(l = 0; l < 10; l++)
               {
-                  double d=
-                    (M->centroid[i*3+0]-T->coord[j*3+0])*(M->centroid[i*3+0]-T->coord[j*3+0])+
-                    (M->centroid[i*3+1]-T->coord[j*3+1])*(M->centroid[i*3+1]-T->coord[j*3+1])+
-                    (M->centroid[i*3+2]-T->coord[j*3+2])*(M->centroid[i*3+2]-T->coord[j*3+2]);
 
-                double e=exp(lambda*d);
+                d = ((grid_x[i]+(x_step/2))-T->coord[l*3+0])*((grid_x[i]+(x_step/2))-T->coord[l*3+0])+
+                    ((grid_y[j+1])-T->coord[l*3+1])*((grid_y[j+1])-T->coord[l*3+1])+
+                    ((grid_z[k]+(z_step/2))-T->coord[l*3+2])*((grid_z[k]+(z_step/2))-T->coord[l*3+2]);
+
+                e = exp(lambda*d);
                 norm+=e;
-                M->tensor[6*i+0]+=T->inputtensor[6*j+0]*e;
-                M->tensor[6*i+1]+=T->inputtensor[6*j+1]*e;
-                M->tensor[6*i+2]+=T->inputtensor[6*j+2]*e;
-                M->tensor[6*i+3]+=T->inputtensor[6*j+3]*e;
-                M->tensor[6*i+4]+=T->inputtensor[6*j+4]*e;
-                M->tensor[6*i+5]+=T->inputtensor[6*j+5]*e;
+                c.tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
+                c.tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
+                c.tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
+                c.tensor_y1[i][j][k]+=T->inputtensor[6*l+3]*e;
+                c.tensor_z0[i][j][k]+=T->inputtensor[6*l+4]*e;
+                c.tensor_z1[i][j][k]+=T->inputtensor[6*l+5]*e;
               }
 
-              M->tensor[6*i+0]/=norm;
-              M->tensor[6*i+1]/=norm;
-              M->tensor[6*i+2]/=norm;
-              M->tensor[6*i+3]/=norm;
-              M->tensor[6*i+4]/=norm;
-              M->tensor[6*i+5]/=norm;
+              c.tensor_x0[i][j][k]/=norm;
+              c.tensor_x1[i][j][k]/=norm;
+              c.tensor_y0[i][j][k]/=norm;
+              c.tensor_y1[i][j][k]/=norm;
+              c.tensor_z0[i][j][k]/=norm;
+              c.tensor_z1[i][j][k]/=norm;
             }
             else
             {
               c.tensor_x0[i][j][k] = 0.0;
+              c.tensor_x1[i][j][k] = 0.0;
               c.tensor_y0[i][j][k] = 0.0;
+              c.tensor_y1[i][j][k] = 0.0;
               c.tensor_z0[i][j][k] = 0.0;
+              c.tensor_z1[i][j][k] = 0.0;
             }
         }
       }
@@ -214,9 +223,3 @@ void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
     sparse_readtensorfiles(tensorfile,T,1000);
     fiberstotensors(T);
     simple_averagetensors(M,T);*/
-
-int main(int argc, char *argv[])
-{
-
-  return 0;
-}

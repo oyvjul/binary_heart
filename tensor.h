@@ -1,12 +1,13 @@
+#ifndef TENSOR_H
+#define TENSOR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "binary_cube_sequential.h"
 
-const double SIGMA_l =  1.21321;
-const double SIGMA_t =  0.2121;
-
-typedef struct {
+typedef struct
+{
     int numtensor;
     double* coord;
     double* inputtensor;
@@ -17,3 +18,5 @@ typedef struct {
 void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip);
 void fiberstotensors(tensorfield* T);
 void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z);
+
+#endif
