@@ -207,23 +207,23 @@ int main(int argc, char *argv[])
     }
   }
 
-  /*for(i = 1; i <= z+1; i++)
+  for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)
     {
       for(k = 1; k <= x+1; k++)
       {
-        if(c.tensor_x1[i][j][k] == 1)
-        {
-          count_inside_tensor++;
-        }
-        else
+        if(c.tensor_x1[i][j][k] == 0)
         {
           count_outside_tensor++;
         }
+        else
+        {
+          count_inside_tensor++;
+        }
       }
     }
-  }*/
+  }
 
   double l2_uold = 0;
 
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 
   double l2_tensor = 0;
 
-  /*for(i = 1; i <= z+1; i++)
+  for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)
     {
@@ -249,10 +249,10 @@ int main(int argc, char *argv[])
         l2_tensor += c.tensor_x1[i][j][k]*c.tensor_x1[i][j][k];
       }
     }
-  }*/
+  }
 
   printf("DEBUG: \n");
   printf("U_OLD: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside, count_outside, l2_uold);
-  //printf("TENSOR: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside_tensor, count_outside_tensor, l2_tensor);
+  printf("TENSOR: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside_tensor, count_outside_tensor, l2_tensor);
   return 0;
 }

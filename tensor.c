@@ -150,6 +150,7 @@ void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
     double *grid_x = (double*)calloc(x+2, sizeof(double));
     double *grid_y = (double*)calloc(y+2, sizeof(double));
     double *grid_z = (double*)calloc(z+2, sizeof(double));
+    //printf("TENSOR NUMBER: %d", T->numtensor);
 
     for(i = 1; i <= x+1; i++)
     {
@@ -174,13 +175,12 @@ void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
         {
 
             if((c.u_old[i-1][j][k] != 0 && c.u_old[i+1][j][k] != 0) &&
-            (c.u_old[i][j-1][k] != 0 && c.u_old[i][j+1][k] != 0) &&
-            (c.u_old[i][j][k-1] != 0 && c.u_old[i][j][k+1] != 0) &&
-            c.u_old[i][j][k] != 0)
+               (c.u_old[i][j-1][k] != 0 && c.u_old[i][j+1][k] != 0) &&
+               (c.u_old[i][j][k-1] != 0 && c.u_old[i][j][k+1] != 0) &&
+                c.u_old[i][j][k] != 0)
             {
               norm = 0.0;
-              //for(l = 0; l < T->numtensor; l++)
-              for(l = 0; l < 10; l++)
+              for(l = 0; l < T->numtensor; l++)
               {
 
                 d = ((grid_x[i]+(x_step/2))-T->coord[l*3+0])*((grid_x[i]+(x_step/2))-T->coord[l*3+0])+
