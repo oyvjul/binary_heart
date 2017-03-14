@@ -141,31 +141,6 @@ void simple_averagetensors(cube *c,tensorfield* T)
     double lambda=-1.0;  //store negative lambda
     int i, j, k, l;
     double d, e, norm;
-    double delta_x, delta_y, delta_z;
-
-    /*double x_step = (3 - 1)/(double)x;
-    double y_step = (2 - 1)/(double)y;
-    double z_step = (5 - 4)/(double)z;*/
-
-    /*double *grid_x = (double*)calloc(x+2, sizeof(double));
-    double *grid_y = (double*)calloc(y+2, sizeof(double));
-    double *grid_z = (double*)calloc(z+2, sizeof(double));
-    //printf("TENSOR NUMBER: %d", T->numtensor);
-
-    for(i = 1; i <= c->x+1; i++)
-    {
-      grid_x[i] = 1 + x_step*(i-1);
-    }
-
-    for(i = 1; i <= c->y+1; i++)
-    {
-      grid_y[i] = 1 + y_step*(i-1);
-    }
-
-    for(i = 1; i <= c->z+1; i++)
-    {
-      grid_z[i] = 4 + z_step*(i-1);
-    }*/
 
     for(i = 1; i <= c->z+1; i++)
     {

@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     {
       for(k = 1; k <= x+1; k++)
       {
-        if(c->tensor_x1[i][j][k] == 0)
+        if(c->tensor_x0[i][j][k] == 0)
         {
           count_outside_tensor++;
         }
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     {
       for(k = 1; k <= x+1; k++)
       {
-        l2_tensor += c->tensor_x1[i][j][k]*c->tensor_x1[i][j][k];
+        l2_tensor += c->tensor_x0[i][j][k]*c->tensor_x0[i][j][k];
       }
     }
   }
