@@ -29,7 +29,7 @@
     int numnodes;
 } meshdata;*/
 
-double ***dallocate_3d(int x, int y, int z)
+/*double ***dallocate_3d(int x, int y, int z)
 {
   int i, j;
   double *storage = (double*)malloc(x * y * z * sizeof(*storage));
@@ -65,7 +65,7 @@ void dinit_3d(double*** matrix, int x, int y, int z)
       }
     }
   }
-}
+}*/
 
 void readmesh(char* infile, meshdata *M)
 {
@@ -325,7 +325,7 @@ void init_cube_grid(cube *c, meshdata *m, int x, int y, int z)
   }
 }
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
   int i, j, k, l, mn, ii, jj, kk;
   double x_max;
@@ -362,4 +362,4 @@ int main(int argc, char *argv[])
 
   //readmesh("mesh_new/3Dheart.1", &m);
   //compute_minmax(&x_max, &x_min, &y_max, &y_min, &z_max, &z_min, &m);
-}
+}*/

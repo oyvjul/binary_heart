@@ -166,7 +166,7 @@ void init_tensor(cube c, int x, int y, int z)
   }
 }*/
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
   int x = 128;
   int y = 128;
@@ -255,4 +255,4 @@ int main(int argc, char *argv[])
   printf("U_OLD: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside, count_outside, l2_uold);
   printf("TENSOR: inside points: %d \t outside points: %d sum check: %0.12f \n", count_inside_tensor, count_outside_tensor, l2_tensor);
   return 0;
-}
+}*/
