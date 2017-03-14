@@ -68,7 +68,7 @@ void init_meshdata(cube *c, int x, int y, int z)
   dinit_3d(c->tensor_z1, x+3, y+3, z+3);
 }
 
-void read_meshdata(double ***u_old, int x, int y, int z)
+void read_cubemesh(double ***u_old, int x, int y, int z)
 {
   int i, j, k;
 
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
 
   init_meshdata(&c, x, y, z);
-  read_meshdata(c.u_old, x, y, z);
+  read_cubemesh(c.u_old, x, y, z);
   sparse_readtensorfiles("mesh_new/3Dheart.1", T, 1000);
   fiberstotensors(T);
   simple_averagetensors(c, T, x, y, z);

@@ -14,15 +14,20 @@ typedef struct
   double ***tensor_y1;
   double ***tensor_z0;
   double ***tensor_z1;
+
   double *grid_x;
   double *grid_y;
   double *grid_z;
+
+  double x_step;
+  double y_step;
+  double z_step;
 }cube;
 
 double ***dallocate_3d(int x, int y, int z);
 void dinit_3d(double*** matrix, int x, int y, int z);
 void init_meshdata(cube *c, int x, int y, int z);
-void read_meshdata(double ***u_old, int x, int y, int z);
+void read_cubemesh(double ***u_old, int x, int y, int z);
 void init_tensor(cube c, int x, int y, int z);
 
 #endif
