@@ -136,82 +136,82 @@ void fiberstotensors(tensorfield* T)
     printf("Averagetensors. Time taken: %lf \n",runtime);
 }*/
 
-void simple_averagetensors(cube c,tensorfield* T, int x, int y, int z)
+void simple_averagetensors(cube *c,tensorfield* T)
 {
     double lambda=-1.0;  //store negative lambda
     int i, j, k, l;
     double d, e, norm;
     double delta_x, delta_y, delta_z;
 
-    double x_step = (3 - 1)/(double)x;
+    /*double x_step = (3 - 1)/(double)x;
     double y_step = (2 - 1)/(double)y;
-    double z_step = (5 - 4)/(double)z;
+    double z_step = (5 - 4)/(double)z;*/
 
-    double *grid_x = (double*)calloc(x+2, sizeof(double));
+    /*double *grid_x = (double*)calloc(x+2, sizeof(double));
     double *grid_y = (double*)calloc(y+2, sizeof(double));
     double *grid_z = (double*)calloc(z+2, sizeof(double));
     //printf("TENSOR NUMBER: %d", T->numtensor);
 
-    for(i = 1; i <= x+1; i++)
+    for(i = 1; i <= c->x+1; i++)
     {
       grid_x[i] = 1 + x_step*(i-1);
     }
 
-    for(i = 1; i <= y+1; i++)
+    for(i = 1; i <= c->y+1; i++)
     {
       grid_y[i] = 1 + y_step*(i-1);
     }
 
-    for(i = 1; i <= z+1; i++)
+    for(i = 1; i <= c->z+1; i++)
     {
       grid_z[i] = 4 + z_step*(i-1);
-    }
+    }*/
 
-    for(i = 1; i <= z+1; i++)
+    for(i = 1; i <= c->z+1; i++)
     {
-      for(j = 1; j <= y+1; j++)
+      for(j = 1; j <= c->y+1; j++)
       {
-        for(k = 1; k <= x+1; k++)
+        for(k = 1; k <= c->x+1; k++)
         {
 
-            if((c.u_old[i-1][j][k] != 0 && c.u_old[i+1][j][k] != 0) &&
-               (c.u_old[i][j-1][k] != 0 && c.u_old[i][j+1][k] != 0) &&
-               (c.u_old[i][j][k-1] != 0 && c.u_old[i][j][k+1] != 0) &&
-                c.u_old[i][j][k] != 0)
+            if((c->u_old[i-1][j][k] != 0 && c->u_old[i+1][j][k] != 0) &&
+               (c->u_old[i][j-1][k] != 0 && c->u_old[i][j+1][k] != 0) &&
+               (c->u_old[i][j][k-1] != 0 && c->u_old[i][j][k+1] != 0) &&
+                c->u_old[i][j][k] != 0)
             {
               norm = 0.0;
               for(l = 0; l < T->numtensor; l++)
               {
 
-                d = ((grid_x[i]+(x_step/2))-T->coord[l*3+0])*((grid_x[i]+(x_step/2))-T->coord[l*3+0])+
-                    ((grid_y[j+1])-T->coord[l*3+1])*((grid_y[j+1])-T->coord[l*3+1])+
-                    ((grid_z[k]+(z_step/2))-T->coord[l*3+2])*((grid_z[k]+(z_step/2))-T->coord[l*3+2]);
+                d = ((c->grid_x[i]+(c->x_step/2))-T->coord[l*3+0])*((c->grid_x[i]+(c->x_step/2))-T->coord[l*3+0])+
+                    ((c->grid_y[j+1])-T->coord[l*3+1])*((c->grid_y[j+1])-T->coord[l*3+1])+
+                    ((c->grid_z[k]+(c->z_step/2))-T->coord[l*3+2])*((c->grid_z[k]+(c->z_step/2))-T->coord[l*3+2]);
 
                 e = exp(lambda*d);
                 norm+=e;
-                c.tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
-                c.tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
-                c.tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
-                c.tensor_y1[i][j][k]+=T->inputtensor[6*l+3]*e;
-                c.tensor_z0[i][j][k]+=T->inputtensor[6*l+4]*e;
-                c.tensor_z1[i][j][k]+=T->inputtensor[6*l+5]*e;
+                c->tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
+                c->tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
+                c->tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
+                c->tensor_y1[i][j][k]+=T->inputtensor[6*l+3]*e;
+                c->tensor_z0[i][j][k]+=T->inputtensor[6*l+4]*e;
+                c->tensor_z1[i][j][k]+=T->inputtensor[6*l+5]*e;
               }
 
-              c.tensor_x0[i][j][k]/=norm;
-              c.tensor_x1[i][j][k]/=norm;
-              c.tensor_y0[i][j][k]/=norm;
-              c.tensor_y1[i][j][k]/=norm;
-              c.tensor_z0[i][j][k]/=norm;
-              c.tensor_z1[i][j][k]/=norm;
+              c->tensor_x0[i][j][k]/=norm;
+              c->tensor_x1[i][j][k]/=norm;
+              c->tensor_y0[i][j][k]/=norm;
+              c->tensor_y1[i][j][k]/=norm;
+              c->tensor_z0[i][j][k]/=norm;
+              c->tensor_z1[i][j][k]/=norm;
             }
             else
             {
-              c.tensor_x0[i][j][k] = 0.0;
-              c.tensor_x1[i][j][k] = 0.0;
-              c.tensor_y0[i][j][k] = 0.0;
-              c.tensor_y1[i][j][k] = 0.0;
-              c.tensor_z0[i][j][k] = 0.0;
-              c.tensor_z1[i][j][k] = 0.0;
+              c->tensor_x0[i][j][k] = 0.0;
+              c->tensor_x1[i][j][k] = 0.0;
+              c->tensor_y0[i][j][k] = 0.0;
+              c->tensor_y1[i][j][k] = 0.0;
+              c->tensor_z0[i][j][k] = 0.0;
+              c->tensor_z1[i][j][k] = 0.0;
             }
         }
       }

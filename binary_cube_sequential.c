@@ -41,7 +41,7 @@ void dinit_3d(double*** matrix, int x, int y, int z)
   }
 }
 
-void init_meshdata(cube *c, int x, int y, int z)
+void init_cubedata(cube *c, int x, int y, int z)
 {
   c->u_old = dallocate_3d(x+3, y+3, z+3);
   dinit_3d(c->u_old, x+3, y+3, z+3);
@@ -66,13 +66,21 @@ void init_meshdata(cube *c, int x, int y, int z)
 
   c->tensor_z1 = dallocate_3d(x+3, y+3, z+3);
   dinit_3d(c->tensor_z1, x+3, y+3, z+3);
+
+  c->grid_x = (double*)calloc(x+2, sizeof(double));
+  c->grid_y = (double*)calloc(y+2, sizeof(double));
+  c->grid_z = (double*)calloc(z+2, sizeof(double));
+
+  c->x = x;
+  c->y = y;
+  c->z = z;
 }
 
-void read_cubemesh(double ***u_old, int x, int y, int z)
+void read_cubemesh(cube *c, char *cubefile)
 {
   int i, j, k;
 
-  FILE *fp = fopen ("mesh_new/128x128x128.txt","r");
+  FILE *fp = fopen (cubefile,"r");
 
   if(fp==NULL)
   {
@@ -80,13 +88,13 @@ void read_cubemesh(double ***u_old, int x, int y, int z)
       exit(0);
   }
 
-  for(i = 1; i <= z+1; i++)
+  for(i = 1; i <= c->z+1; i++)
   {
-    for(j = 1; j <= y+1; j++)
+    for(j = 1; j <= c->y+1; j++)
     {
-      for(k = 1; k <= x+1; k++)
+      for(k = 1; k <= c->x+1; k++)
       {
-        fscanf(fp,"%lf ", &u_old[i][j][k]);
+        fscanf(fp,"%lf ", &c->u_old[i][j][k]);
         //printf("%f ", tensor_x[i][j][k]);
       }
       fscanf(fp,"\n");

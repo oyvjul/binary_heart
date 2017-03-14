@@ -22,12 +22,16 @@ typedef struct
   double x_step;
   double y_step;
   double z_step;
+
+  int x;
+  int y;
+  int z;
 }cube;
 
 double ***dallocate_3d(int x, int y, int z);
 void dinit_3d(double*** matrix, int x, int y, int z);
-void init_meshdata(cube *c, int x, int y, int z);
-void read_cubemesh(double ***u_old, int x, int y, int z);
+void init_cubedata(cube *c, int x, int y, int z);
+void read_cubemesh(cube *c, char *cubefile);
 void init_tensor(cube c, int x, int y, int z);
 
 #endif

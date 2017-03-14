@@ -39,6 +39,6 @@ void compute_minmax(double *x_max, double *x_min, double *y_max, double *y_min, 
 void calculate_centroid(meshdata *m);
 double determinant(double *a, double *b, double *c, double *d);
 int inside(int numtet, int *elements, double *nodes, double point_x, double point_y, double point_z);
-void init_cube_grid(cube *c, meshdata *m, int x, int y, int z);
+void init_cube_grid(cube *c, meshdata *m);
 
 #endif

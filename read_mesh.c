@@ -291,7 +291,7 @@ int inside(int numtet, int *elements, double *nodes, double point_x, double poin
   return 0;
 }
 
-void init_cube_grid(cube *c, meshdata *m, int x, int y, int z)
+void init_cube_grid(cube *c, meshdata *m)
 {
   int i, j, k;
   double x_max;
@@ -303,23 +303,23 @@ void init_cube_grid(cube *c, meshdata *m, int x, int y, int z)
   readmesh("mesh_new/3Dheart.1", m);
   compute_minmax(&x_max, &x_min, &y_max, &y_min, &z_max, &z_min, m);
 
-  c->x_step = (x_max - x_min)/(double)x;
-  c->y_step = (y_max - y_min)/(double)y;
-  c->z_step = (z_max - z_min)/(double)z;
+  c->x_step = (x_max - x_min)/(double)c->x;
+  c->y_step = (y_max - y_min)/(double)c->y;
+  c->z_step = (z_max - z_min)/(double)c->z;
 
   //printf("x_max: %f \t x_min: %f \t y_max: %f \t y_min: %f \t z_max: %f \t z_min: %f\n", x_max, x_min, y_max, y_min, z_max, z_min);
 
-  for(i = 1; i <= x+1; i++)
+  for(i = 1; i <= c->x+1; i++)
   {
     c->grid_x[i] = x_min + c->x_step*(i-1);
   }
 
-  for(i = 1; i <= y+1; i++)
+  for(i = 1; i <= c->y+1; i++)
   {
     c->grid_y[i] = y_min + c->y_step*(i-1);
   }
 
-  for(i = 1; i <= z+1; i++)
+  for(i = 1; i <= c->z+1; i++)
   {
     c->grid_z[i] = z_min + c->z_step*(i-1);
   }
