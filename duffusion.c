@@ -93,51 +93,53 @@ double cell_upper_left_one(double ***u, int i, int j, int k)
   return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
 }
 
-//tbd
+//done
 double cell_upper_left(double ***u, int i, int j, int k)
 {
   int direction_x, direction_y, direction_z;
 
-  direction_x = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_x = u[i][j+1][k] + u[i][j][k] + u[i][j+1][k-1] + u[i][j][k-1] -
+                u[i-1][j+1][k] - u[i-1][j][k] - u[i-1][j+1][k-1] - u[i-1][j][k-1];
 
-  direction_y = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_y = u[i][j+1][k] + u[i-1][j+1][k] + u[i][j+1][k-1] + u[i-1][j+1][k-1] -
+                u[i][j][k] - u[i-1][j][k] - u[i][j][k-1] - u[i-1][j][k-1];
 
-  direction_z = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_z = u[i][j+1][k] + u[i][j][k] + u[i-1][j+1][k] + u[i-1][j][k] -
+                u[i][j+1][k-1] - u[i][j][k-1] - u[i-1][j+1][k-1] - u[i-1][j][k-1];
 
   return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
 }
 
+//tbd
 double cell_lower_left(double ***u, int i, int j, int k)
 {
   int direction_x, direction_y, direction_z;
 
-  direction_x = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_x = u[i+1][j+1][k+1] + u[i+1][j][k+1] + u[i+1][j+1][k] + u[i+1][j][k] -
+                u[i][j+1][k+1] - u[i][j][k+1] - u[i][j+1][k] - u[i][j][k];
 
-  direction_y = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_y = u[i+1][j+1][k+1] + u[i][j+1][k+1] + u[i+1][j+1][k] + u[i][j+1][k] -
+                u[i+1][j][k+1] - u[i][j][k+1] - u[i+1][j][k] - u[i][j][k];
 
-  direction_z = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_z = u[i+1][j+1][k+1] + u[i+1][j][k+1] + u[i][j+1][k+1] + u[i][j][k+1] -
+                u[i+1][j+1][k] - u[i+1][j][k] - u[i][j+1][k] - u[i][j][k];
 
   return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
 }
 
+//tbd
 double cell_lower_left_one(double ***u, int i, int j, int k)
 {
   int direction_x, direction_y, direction_z;
 
-  direction_x = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_x = u[i][j][k] + u[i][j-1][k] + u[i][j][k-1] + u[i][j-1][k-1] -
+                u[i-1][j][k] - u[i-1][j-1][k] - u[i-1][j][k-1] - u[i-1][j-1][k-1];
 
-  direction_y = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_y = u[i][j][k] + u[i-1][j][k] + u[i][j][k-1] + u[i-1][j][k-1] -
+                u[i][j-1][k] - u[i-1][j-1][k] - u[i][j-1][k-1] - u[i-1][j-1][k-1];
 
-  direction_z = u[i][j][k] + u[i][j][k] + u[i][j][k] + u[i][j][k] -
-                u[i][j][k] - u[i][j][k] - u[i][j][k] - u[i][j][k];
+  direction_z = u[i][j][k] + u[i][j-1][k] + u[i-1][j][k] + u[i-1][j-1][k] -
+                u[i][j][k-1] - u[i][j-1][k-1] - u[i-1][j][k-1] - u[i-1][j-1][k-1];
 
   return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
 }
