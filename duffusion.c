@@ -130,3 +130,39 @@ double cell_lower_left(double ***u, double *** tensor_x, double ***tensor_y, dou
 
   return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
+
+double divergence_direction_x(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+{
+  return (cell_upper_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_lower_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_upper_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_lower_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_upper_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_upper_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k))/(2*delta_x);
+}
+
+double divergence_direction_y(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+{
+  return (cell_upper_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_upper_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_upper_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_upper_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k))/(2*delta_y);
+}
+
+double divergence_direction_z(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+{
+  return (cell_upper_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_lower_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_upper_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         + cell_lower_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_upper_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_upper_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
+         - cell_lower_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k))/(2*delta_z);
+}
