@@ -152,7 +152,7 @@ void simple_averagetensors(cube *c,tensorfield* T)
             if((c->u_old[i-1][j][k] != 0 && c->u_old[i+1][j][k] != 0) &&
                (c->u_old[i][j-1][k] != 0 && c->u_old[i][j+1][k] != 0) &&
                (c->u_old[i][j][k-1] != 0 && c->u_old[i][j][k+1] != 0) &&
-                c->u_old[i][j][k] != 0)
+                (c->u_old[i][j][k] != 0))
             {
               norm = 0.0;
               for(l = 0; l < T->numtensor; l++)
