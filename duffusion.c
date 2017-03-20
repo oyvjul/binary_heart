@@ -3,6 +3,8 @@
 //#include <math.h>
 #include "binary_cube_sequential.h"
 
+int direction_x, direction_y, direction_z;
+
 int main(int agrc, char *argv[])
 {
 
@@ -10,46 +12,40 @@ int main(int agrc, char *argv[])
 }
 
 //(i+1/2, j+1/2, k+1/2)
-double cell_upper_right_one(double ***u, int i, int j, int k)
+double cell_upper_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
+  direction_x = (u[i+1][j+1][k+1] + u[i+1][j][k+1] + u[i+1][j+1][k] + u[i+1][j][k] -
+                u[i][j+1][k+1] - u[i][j][k+1] - u[i][j+1][k] - u[i][j][k])/(2*delta_x);
 
-  direction_x = u[i+1][j+1][k+1] + u[i+1][j][k+1] + u[i+1][j+1][k] + u[i+1][j][k] -
-                u[i][j+1][k+1] - u[i][j][k+1] - u[i][j+1][k] - u[i][j][k];
+  direction_y = (u[i+1][j+1][k+1] + u[i][j+1][k+1] + u[i+1][j+1][k] + u[i][j+1][k] -
+                u[i+1][j][k+1] - u[i][j][k+1] - u[i+1][j][k] - u[i][j][k])/(2*delta_y);
 
-  direction_y = u[i+1][j+1][k+1] + u[i][j+1][k+1] + u[i+1][j+1][k] + u[i][j+1][k] -
-                u[i+1][j][k+1] - u[i][j][k+1] - u[i+1][j][k] - u[i][j][k];
+  direction_z = (u[i+1][j+1][k+1] + u[i+1][j][k+1] + u[i][j+1][k+1] + u[i][j][k+1] -
+                u[i+1][j+1][k] - u[i+1][j][k] - u[i][j+1][k] - u[i][j][k])/(2*delta_z);
 
-  direction_z = u[i+1][j+1][k+1] + u[i+1][j][k+1] + u[i][j+1][k+1] + u[i][j][k+1] -
-                u[i+1][j+1][k] - u[i+1][j][k] - u[i][j+1][k] - u[i][j][k];
-
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i+1/2, j+1/2, k-1/2)
-double cell_upper_right(double ***u, int i, int j, int k)
+double cell_upper_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
+  direction_x = (u[i+1][j+1][k] + u[i+1][j][k] + u[i+1][j+1][k-1] + u[i+1][j][k-1] -
+                u[i][j+1][k] - u[i][j][k] - u[i][j+1][k-1] - u[i][j][k-1])/(2*delta_x);
 
-  direction_x = u[i+1][j+1][k] + u[i+1][j][k] + u[i+1][j+1][k-1] + u[i+1][j][k-1] -
-                u[i][j+1][k] - u[i][j][k] - u[i][j+1][k-1] - u[i][j][k-1];
+  direction_y = (u[i+1][j+1][k] + u[i][j+1][k] + u[i+1][j+1][k-1] + u[i][j+1][k-1] -
+                u[i+1][j][k] - u[i][j][k] - u[i+1][j][k-1] - u[i][j][k-1])/(2*delta_y);
 
-  direction_y = u[i+1][j+1][k] + u[i][j+1][k] + u[i+1][j+1][k-1] + u[i][j+1][k-1] -
-                u[i+1][j][k] - u[i][j][k] - u[i+1][j][k-1] - u[i][j][k-1];
+  direction_z = (u[i+1][j+1][k] + u[i+1][j][k] + u[i][j+1][k] + u[i][j][k] -
+                u[i+1][j+1][k-1] - u[i+1][j][k-1] - u[i][j+1][k-1] - u[i][j][k-1])/(2*delta_z);
 
-  direction_z = u[i+1][j+1][k] + u[i+1][j][k] + u[i][j+1][k] + u[i][j][k] -
-                u[i+1][j+1][k-1] - u[i+1][j][k-1] - u[i][j+1][k-1] - u[i][j][k-1];
-
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i+1/2, j-1/2, k-1/2)
-double cell_lower_right(double ***u, int i, int j, int k)
+double cell_lower_right(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
-
-  direction_x = u[i+1][j][k] + u[i+1][j-1][k] + u[i+1][j][k-1] + u[i+1][j-1][k-1] -
-                u[i][j][k] - u[i][j-1][k] - u[i][j][k-1] - u[i][j-1][k-1];
+  direction_x = (u[i+1][j][k] + u[i+1][j-1][k] + u[i+1][j][k-1] + u[i+1][j-1][k-1] -
+                u[i][j][k] - u[i][j-1][k] - u[i][j][k-1] - u[i][j-1][k-1])/(2*delta_x);
 
   direction_y = u[i+1][j][k] + u[i][j][k] + u[i+1][j][k-1] + u[i][j][k-1] -
                 u[i+1][j-1][k] - u[i][j-1][k] - u[i+1][j-1][k-1] - u[i][j-1][k-1];
@@ -57,14 +53,12 @@ double cell_lower_right(double ***u, int i, int j, int k)
   direction_z = u[i+1][j][k] + u[i+1][j-1][k] + u[i][j][k] + u[i][j-1][k] -
                 u[i+1][j][k-1] - u[i+1][j-1][k-1] - u[i][j][k-1] - u[i][j-1][k-1];
 
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i+1/2, j-1/2, k+1/2)
-double cell_lower_right_one(double ***u, int i, int j, int k)
+double cell_lower_right_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
-
   direction_x = u[i+1][j][k+1] + u[i+1][j-1][k+1] + u[i+1][j][k] + u[i+1][j-1][k] -
                 u[i][j][k+1] - u[i][j-1][k+1] - u[i][j][k] - u[i][j-1][k];
 
@@ -74,14 +68,12 @@ double cell_lower_right_one(double ***u, int i, int j, int k)
   direction_z = u[i+1][j][k+1] + u[i+1][j-1][k+1] + u[i][j][k+1] + u[i][j-1][k+1] -
                 u[i+1][j][k] - u[i+1][j-1][k] - u[i][j][k] - u[i][j-1][k];
 
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i-1/2, j+1/2, k+1/2)
-double cell_upper_left_one(double ***u, int i, int j, int k)
+double cell_upper_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
-
   direction_x = u[i][j+1][k+1] + u[i][j][k+1] + u[i][j+1][k] + u[i][j][k] -
                 u[i-1][j+1][k+1] - u[i-1][j][k+1] - u[i-1][j+1][k] - u[i-1][j][k];
 
@@ -91,14 +83,12 @@ double cell_upper_left_one(double ***u, int i, int j, int k)
   direction_z = u[i][j+1][k+1] + u[i][j][k+1] + u[i-1][j+1][k+1] + u[i-1][j][k+1] -
                 u[i][j+1][k] - u[i][j][k] - u[i-1][j+1][k] - u[i-1][j][k];
 
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i-1/2, j+1/2, k-1/2)
-double cell_upper_left(double ***u, int i, int j, int k)
+double cell_upper_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
-
   direction_x = u[i][j+1][k] + u[i][j][k] + u[i][j+1][k-1] + u[i][j][k-1] -
                 u[i-1][j+1][k] - u[i-1][j][k] - u[i-1][j+1][k-1] - u[i-1][j][k-1];
 
@@ -108,14 +98,12 @@ double cell_upper_left(double ***u, int i, int j, int k)
   direction_z = u[i][j+1][k] + u[i][j][k] + u[i-1][j+1][k] + u[i-1][j][k] -
                 u[i][j+1][k-1] - u[i][j][k-1] - u[i-1][j+1][k-1] - u[i-1][j][k-1];
 
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i-1/2, j-1/2, k+1/2)
-double cell_lower_left_one(double ***u, int i, int j, int k)
+double cell_lower_left_one(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
-
   direction_x = u[i][j][k+1] + u[i][j-1][k+1] + u[i][j][k] + u[i][j-1][k] -
                 u[i-1][j][k+1] - u[i-1][j-1][k+1] - u[i-1][j-1][k] - u[i-1][j-1][k];
 
@@ -125,14 +113,12 @@ double cell_lower_left_one(double ***u, int i, int j, int k)
   direction_z = u[i][j][k+1] + u[i][j-1][k+1] + u[i-1][j][k+1] + u[i-1][j-1][k+1] -
                 u[i][j][k] - u[i][j-1][k] - u[i-1][j][k] - u[i-1][j-1][k];
 
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
 
 //(i-1/2, j-1/2, k-1/2)
-double cell_lower_left(double ***u, int i, int j, int k)
+double cell_lower_left(double ***u, double *** tensor_x, double ***tensor_y, double ***tensor_z, int i, int j, int k)
 {
-  int direction_x, direction_y, direction_z;
-
   direction_x = u[i][j][k] + u[i][j-1][k] + u[i][j][k-1] + u[i][j-1][k-1] -
                 u[i-1][j][k] - u[i-1][j-1][k] - u[i-1][j][k-1] - u[i-1][j-1][k-1];
 
@@ -142,5 +128,5 @@ double cell_lower_left(double ***u, int i, int j, int k)
   direction_z = u[i][j][k] + u[i][j-1][k] + u[i-1][j][k] + u[i-1][j-1][k] -
                 u[i][j][k-1] - u[i][j-1][k-1] - u[i-1][j][k-1] - u[i-1][j-1][k-1];
 
-  return (tensor_x0*direction_x) + (tensor_x1*direction_y) + (tensor_x1*direction_z);
+  return (tensor_x*direction_x) + (tensor_y*direction_y) + (tensor_z*direction_z);
 }
