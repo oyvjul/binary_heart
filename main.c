@@ -8,9 +8,9 @@
 
 int main(int argc, char *argv[])
 {
-  int x = 100;
-  int y = 100;
-  int z = 100;
+  int x = 6;
+  int y = 6;
+  int z = 6;
   double count = 1.0;
   int count_inside, count_outside;
   int count_inside_tensor, count_outside_tensor;
@@ -25,6 +25,12 @@ int main(int argc, char *argv[])
   //sparse_readtensorfiles("mesh_new/3Dheart.1", t, 1000);
   //fiberstotensors(t);
   //simple_averagetensors(c, t);
+  double start = omp_get_wtime();
+  #ifdef GENERATE_TENSORS
+    generate_tensor(c, t, m);
+    printf("GENERATED \n");
+  #endif
+  double end = omp_get_wtime();
 
   for(i = 1; i <= z+1; i++)
   {
@@ -38,8 +44,6 @@ int main(int argc, char *argv[])
     }
   }
 
-  double start = omp_get_wtime();
-
   for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)
@@ -50,8 +54,6 @@ int main(int argc, char *argv[])
       }
     }
   }
-
-  double end = omp_get_wtime();
   printf("it took : %0.12f", end-start);
   /*write_binaryformat("mesh_new/test.tensor", c->u_old, x+3, y+3, z+3);
   read_binaryformat("mesh_new/test.tensor", &c->tensor_x0, &x+3, &y+3, &z+3);

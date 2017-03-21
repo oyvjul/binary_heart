@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "binary_cube_sequential.h"
+#include "read_mesh"
 
 typedef struct
 {
@@ -18,5 +19,6 @@ typedef struct
 void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip);
 void fiberstotensors(tensorfield* T);
 void simple_averagetensors(cube *c,tensorfield* T);
+void generate_tensor(cube *c,tensorfield* T, meshdata *m);
 
 #endif
