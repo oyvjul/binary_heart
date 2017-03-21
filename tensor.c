@@ -3,8 +3,6 @@
 #include <string.h>
 #include <math.h>
 #include "tensor.h"
-#include "binary_cube_sequential.h"
-#include "read_mesh.h"
 
 const double SIGMA_l =  1.21321;
 const double SIGMA_t =  0.2121;
@@ -191,15 +189,15 @@ void generate_tensor(cube *c,tensorfield* T, meshdata *m)
       for(k = 1; k <= c->x+1; k++)
       {
         //is_inside = inside(&m, grid[i*x*y+j*x+k].x, grid[i*x*y+j*x+k].y, grid[i*x*y+j*x+k].z);
-        c->grid_x[k] += c->grid_x[k]+(c->x_step/2);
-        c->grid_x[j] += c->grid_x[j]+(c->y_step/2);
-        c->grid_x[i] += c->grid_x[i]+(c->z_step/2);
+        c->grid_x[k] = c->grid_x[k]+(c->x_step/2);
+        c->grid_y[j] = c->grid_y[j]+(c->y_step/2);
+        c->grid_z[i] = c->grid_z[i]+(c->z_step/2);
 
         is_inside = inside(m->numtet, m->elements, m->nodes, c->grid_x[k], c->grid_y[j], c->grid_z[i]);
 
         if(is_inside == 1)
         {
-          norm = 0.0;
+          /*norm = 0.0;
           for(l = 0; l < T->numtensor; l++)
           {
             d = (c->grid_x[i]-T->coord[l*3+0])*(c->grid_x[i]-T->coord[l*3+0])+
@@ -221,7 +219,8 @@ void generate_tensor(cube *c,tensorfield* T, meshdata *m)
           c->tensor_y0[i][j][k]/=norm;
           c->tensor_y1[i][j][k]/=norm;
           c->tensor_z0[i][j][k]/=norm;
-          c->tensor_z1[i][j][k]/=norm;
+          c->tensor_z1[i][j][k]/=norm;*/
+          c->tensor_x0[i][j][k] = 1;
         }
         else
         {

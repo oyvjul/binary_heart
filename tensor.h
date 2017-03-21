@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "binary_cube_sequential.h"
-#include "read_mesh"
+#include "read_mesh.h"
 
 typedef struct
 {
