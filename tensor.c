@@ -4,6 +4,7 @@
 #include <math.h>
 #include "tensor.h"
 #include "binary_cube_sequential.h"
+#include "read_mesh.h"
 
 const double SIGMA_l =  1.21321;
 const double SIGMA_t =  0.2121;
@@ -149,48 +150,91 @@ void simple_averagetensors(cube *c,tensorfield* T)
         for(k = 1; k <= c->x+1; k++)
         {
 
-            if((c->u_old[i-1][j][k] != 0 && c->u_old[i+1][j][k] != 0) &&
-               (c->u_old[i][j-1][k] != 0 && c->u_old[i][j+1][k] != 0) &&
-               (c->u_old[i][j][k-1] != 0 && c->u_old[i][j][k+1] != 0) &&
-                (c->u_old[i][j][k] != 0))
-            {
-              norm = 0.0;
-              for(l = 0; l < T->numtensor; l++)
-              {
+          norm = 0.0;
+          for(l = 0; l < T->numtensor; l++)
+          {
+            d = ((c->grid_x[i]+(c->x_step/2))-T->coord[l*3+0])*((c->grid_x[i]+(c->x_step/2))-T->coord[l*3+0])+
+                ((c->grid_y[j+1])-T->coord[l*3+1])*((c->grid_y[j+1])-T->coord[l*3+1])+
+                ((c->grid_z[k]+(c->z_step/2))-T->coord[l*3+2])*((c->grid_z[k]+(c->z_step/2))-T->coord[l*3+2]);
 
-                d = ((c->grid_x[i]+(c->x_step/2))-T->coord[l*3+0])*((c->grid_x[i]+(c->x_step/2))-T->coord[l*3+0])+
-                    ((c->grid_y[j+1])-T->coord[l*3+1])*((c->grid_y[j+1])-T->coord[l*3+1])+
-                    ((c->grid_z[k]+(c->z_step/2))-T->coord[l*3+2])*((c->grid_z[k]+(c->z_step/2))-T->coord[l*3+2]);
+            e = exp(lambda*d);
+            norm+=e;
+            c->tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
+            c->tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
+            c->tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
+            c->tensor_y1[i][j][k]+=T->inputtensor[6*l+3]*e;
+            c->tensor_z0[i][j][k]+=T->inputtensor[6*l+4]*e;
+            c->tensor_z1[i][j][k]+=T->inputtensor[6*l+5]*e;
+          }
 
-                e = exp(lambda*d);
-                norm+=e;
-                c->tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
-                c->tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
-                c->tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
-                c->tensor_y1[i][j][k]+=T->inputtensor[6*l+3]*e;
-                c->tensor_z0[i][j][k]+=T->inputtensor[6*l+4]*e;
-                c->tensor_z1[i][j][k]+=T->inputtensor[6*l+5]*e;
-              }
-
-              c->tensor_x0[i][j][k]/=norm;
-              c->tensor_x1[i][j][k]/=norm;
-              c->tensor_y0[i][j][k]/=norm;
-              c->tensor_y1[i][j][k]/=norm;
-              c->tensor_z0[i][j][k]/=norm;
-              c->tensor_z1[i][j][k]/=norm;
-            }
-            else
-            {
-              c->tensor_x0[i][j][k] = 0.0;
-              c->tensor_x1[i][j][k] = 0.0;
-              c->tensor_y0[i][j][k] = 0.0;
-              c->tensor_y1[i][j][k] = 0.0;
-              c->tensor_z0[i][j][k] = 0.0;
-              c->tensor_z1[i][j][k] = 0.0;
-            }
+          c->tensor_x0[i][j][k]/=norm;
+          c->tensor_x1[i][j][k]/=norm;
+          c->tensor_y0[i][j][k]/=norm;
+          c->tensor_y1[i][j][k]/=norm;
+          c->tensor_z0[i][j][k]/=norm;
+          c->tensor_z1[i][j][k]/=norm;
         }
       }
     }
+}
+
+void generate_tensor(cube *c,tensorfield* T, meshdata *m)
+{
+  double lambda=-1.0;  //store negative lambda
+  int i, j, k, l;
+  double d, e, norm;
+  int is_inside = 0;
+  for(i = 1; i <= c->z+1; i++)
+  {
+    for(j = 1; j <= c->y+1; j++)
+    {
+      for(k = 1; k <= c->x+1; k++)
+      {
+        //is_inside = inside(&m, grid[i*x*y+j*x+k].x, grid[i*x*y+j*x+k].y, grid[i*x*y+j*x+k].z);
+        c->grid_x[k] += c->grid_x[k]+(c->x_step/2);
+        c->grid_x[j] += c->grid_x[j]+(c->y_step/2);
+        c->grid_x[i] += c->grid_x[i]+(c->z_step/2);
+
+        is_inside = inside(m->numtet, m->elements, m->nodes, c->grid_x[k], c->grid_y[j], c->grid_z[i]);
+
+        if(is_inside == 1)
+        {
+          norm = 0.0;
+          for(l = 0; l < T->numtensor; l++)
+          {
+            d = (c->grid_x[i]-T->coord[l*3+0])*(c->grid_x[i]-T->coord[l*3+0])+
+                (c->grid_y[j]-T->coord[l*3+1])*(c->grid_y[j]-T->coord[l*3+1])+
+                (c->grid_z[k]-T->coord[l*3+2])*(c->grid_z[k]-T->coord[l*3+2]);
+
+            e = exp(lambda*d);
+            norm+=e;
+            c->tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
+            c->tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
+            c->tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
+            c->tensor_y1[i][j][k]+=T->inputtensor[6*l+3]*e;
+            c->tensor_z0[i][j][k]+=T->inputtensor[6*l+4]*e;
+            c->tensor_z1[i][j][k]+=T->inputtensor[6*l+5]*e;
+          }
+
+          c->tensor_x0[i][j][k]/=norm;
+          c->tensor_x1[i][j][k]/=norm;
+          c->tensor_y0[i][j][k]/=norm;
+          c->tensor_y1[i][j][k]/=norm;
+          c->tensor_z0[i][j][k]/=norm;
+          c->tensor_z1[i][j][k]/=norm;
+        }
+        else
+        {
+          c->tensor_x0[i][j][k] = 0;
+          c->tensor_x1[i][j][k] = 0;
+          c->tensor_y0[i][j][k] = 0;
+          c->tensor_y1[i][j][k] = 0;
+          c->tensor_z0[i][j][k] = 0;
+          c->tensor_z1[i][j][k] = 0;
+        }
+      }
+    }
+  }
 }
 
 /*tensorfield *T = (tensorfield *)malloc(sizeof(tensorfield));

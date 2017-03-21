@@ -170,9 +170,3 @@ double divergence_cell_direction_z(double ***u, double tensor_x, double tensor_y
          - flux_upper_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
          - flux_lower_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k))/(2*delta_z);
 }
-
-int main(int argc, char *argv[])
-{
-
-  return 0;
-}
