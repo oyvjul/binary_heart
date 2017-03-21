@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     {
       for(k = 1; k <= x+1; k++)
       {
-        c->u_old[i][j][k] = count;
+        c->u_old[i][j][k] = c->grid_x[k];
         count++;
       }
     }
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
       }
     }
   }*/
-  /*write_binaryformat("mesh_new/test.tensor", c->u_old, x+3, y+3, z+3);
+  write_binaryformat("mesh_new/test.tensor", c->u_old, x+3, y+3, z+3);
   read_binaryformat("mesh_new/test.tensor", &c->tensor_x0, &x+3, &y+3, &z+3);
 
   for(i = 1; i <= z+1; i++)
@@ -132,12 +132,12 @@ int main(int argc, char *argv[])
     {
       for(k = 1; k <= x+1; k++)
       {
-        printf("%f ", c->tensor_x0[i][j][k]);
+        printf("%f ", c->u_old[i][j][k]);
       }
       printf("\n");
     }
     printf("\n");
-  }*/
+  }
 
   /*for(i = 1; i <= z+1; i++)
   {
