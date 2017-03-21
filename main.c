@@ -4,13 +4,14 @@
 #include "read_mesh.h"
 #include "io.h"
 #include "diffusion.h"
+#include "omp.h"
 
 int main(int argc, char *argv[])
 {
-  int x = 8;
-  int y = 8;
-  int z = 8;
-  double count = 0.0;
+  int x = 100;
+  int y = 100;
+  int z = 100;
+  double count = 1.0;
   int count_inside, count_outside;
   int count_inside_tensor, count_outside_tensor;
   int i, j, k;
@@ -37,17 +38,21 @@ int main(int argc, char *argv[])
     }
   }
 
+  double start = omp_get_wtime();
+
   for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)
     {
       for(k = 1; k <= x+1; k++)
       {
-        divergence_direction_x(c->u_old, 2.1, 2.1, 2.1, c->x_step, c->y_step, c->y_step, i, j, k);
+        divergence_cell_direction_z(c->u_old, count, count, count, c->x_step, c->y_step, c->y_step, i, j, k);
       }
     }
   }
 
+  double end = omp_get_wtime();
+  printf("it took : %0.12f", end-start);
   /*write_binaryformat("mesh_new/test.tensor", c->u_old, x+3, y+3, z+3);
   read_binaryformat("mesh_new/test.tensor", &c->tensor_x0, &x+3, &y+3, &z+3);
 

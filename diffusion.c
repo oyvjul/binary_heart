@@ -149,24 +149,32 @@ double divergence_cell_direction_x(double ***u, double tensor_x, double tensor_y
 
 double divergence_cell_direction_y(double ***u, double tensor_x, double tensor_y, double tensor_z, double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
-  return (flux_upper_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         + flux_upper_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         + flux_upper_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         + flux_upper_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_lower_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_lower_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_lower_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_lower_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k))/(2*delta_y);
+  double upper_right_one, lower_right_one, upper_right, lower_right, upper_left_one, lower_left_one, upper_left, lower_left;
+
+  upper_right_one = flux_upper_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  upper_left_one = flux_upper_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  upper_right = flux_upper_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  upper_left = flux_upper_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_right_one = flux_lower_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_left_one = flux_lower_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_right =  flux_lower_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_left = flux_lower_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+
+  return (upper_right_one + upper_left_one + upper_right + upper_left - lower_right_one - lower_left_one - lower_right - lower_left)/(2*delta_y);
 }
 
 double divergence_cell_direction_z(double ***u, double tensor_x, double tensor_y, double tensor_z, double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
-  return (flux_upper_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         + flux_lower_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         + flux_upper_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         + flux_lower_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_upper_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_lower_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_upper_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k)
-         - flux_lower_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k))/(2*delta_z);
+  double upper_right_one, lower_right_one, upper_right, lower_right, upper_left_one, lower_left_one, upper_left, lower_left;
+
+  upper_right_one = flux_upper_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_right_one = flux_lower_right_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  upper_left_one = flux_upper_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_left_one = flux_lower_left_one(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  upper_right = flux_upper_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_right = flux_lower_right(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  upper_left = flux_upper_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+  lower_left = flux_lower_left(u, tensor_x, tensor_y, tensor_z, delta_x, delta_y, delta_z, i, j, k);
+
+  return (upper_right_one + lower_right_one + upper_left_one + lower_left_one - upper_right - lower_right - upper_left - lower_left)/(2*delta_z);
 }
