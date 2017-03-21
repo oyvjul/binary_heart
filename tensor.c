@@ -182,11 +182,11 @@ void generate_tensor(cube *c,tensorfield* T, meshdata *m)
   int i, j, k, l;
   double d, e, norm;
   int is_inside = 0;
-  for(i = 1; i <= c->z+1; i++)
+  for(i = 1; i <= c->z; i++)
   {
-    for(j = 1; j <= c->y+1; j++)
+    for(j = 1; j <= c->y; j++)
     {
-      for(k = 1; k <= c->x+1; k++)
+      for(k = 1; k <= c->x; k++)
       {
         //is_inside = inside(&m, grid[i*x*y+j*x+k].x, grid[i*x*y+j*x+k].y, grid[i*x*y+j*x+k].z);
         c->grid_x[k] = c->grid_x[k]+(c->x_step/2);
@@ -197,15 +197,15 @@ void generate_tensor(cube *c,tensorfield* T, meshdata *m)
 
         if(is_inside == 1)
         {
-          /*norm = 0.0;
+          norm = 0.0;
           for(l = 0; l < T->numtensor; l++)
           {
-            d = (c->grid_x[i]-T->coord[l*3+0])*(c->grid_x[i]-T->coord[l*3+0])+
+            d = (c->grid_x[k]-T->coord[l*3+0])*(c->grid_x[k]-T->coord[l*3+0])+
                 (c->grid_y[j]-T->coord[l*3+1])*(c->grid_y[j]-T->coord[l*3+1])+
-                (c->grid_z[k]-T->coord[l*3+2])*(c->grid_z[k]-T->coord[l*3+2]);
+                (c->grid_z[i]-T->coord[l*3+2])*(c->grid_z[i]-T->coord[l*3+2]);
 
             e = exp(lambda*d);
-            norm+=e;
+            norm += e;
             c->tensor_x0[i][j][k]+=T->inputtensor[6*l+0]*e;
             c->tensor_x1[i][j][k]+=T->inputtensor[6*l+1]*e;
             c->tensor_y0[i][j][k]+=T->inputtensor[6*l+2]*e;
@@ -219,8 +219,8 @@ void generate_tensor(cube *c,tensorfield* T, meshdata *m)
           c->tensor_y0[i][j][k]/=norm;
           c->tensor_y1[i][j][k]/=norm;
           c->tensor_z0[i][j][k]/=norm;
-          c->tensor_z1[i][j][k]/=norm;*/
-          c->tensor_x0[i][j][k] = 1;
+          c->tensor_z1[i][j][k]/=norm;
+          //c->tensor_x0[i][j][k] = 1;
         }
         else
         {
