@@ -126,7 +126,8 @@ int main(int argc, char *argv[])
     }
     printf("\n");
   }*/
-  for(int l = 0; l < 3; l++)
+  double start1 = omp_get_wtime();
+  for(int l = 0; l < 40; l++)
   {
   for(i = 1; i <= z+1; i++)
   {
@@ -145,9 +146,41 @@ int main(int argc, char *argv[])
   temp = c->u_old;
   c->u_old = c->u_new;
   c->u_new = temp;
-  }
+}
 
-  for(i = 1; i <= z+1; i++)
+
+/*for(int l = 0; l < 40; l++)
+{
+for(i = 1; i <= z+1; i++)
+{
+  for(j = 1; j <= y+1; j++)
+  {
+    for(k = 1; k <= x+1; k++)
+    {
+      c->u_new[i][j][k] = divergence_cell_direction_x(c->u_old, c->tensor_x0[i][j][k], c->tensor_x1[i][j][k], c->tensor_y0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k);
+    }
+
+    for(k = 1; k <= x+1; k++)
+    {
+      c->u_new[i][j][k] += divergence_cell_direction_y(c->u_old, c->tensor_x0[i][j][k], c->tensor_x1[i][j][k], c->tensor_y0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k);
+    }
+
+    for(k = 1; k <= x+1; k++)
+    {
+      c->u_new[i][j][k] += divergence_cell_direction_z(c->u_old, c->tensor_x0[i][j][k], c->tensor_x1[i][j][k], c->tensor_y0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k);
+    }
+  }
+}
+
+double ***temp;
+temp = c->u_old;
+c->u_old = c->u_new;
+c->u_new = temp;
+}*/
+  double end1 = omp_get_wtime();
+  printf("it took: %0.12f", end1-start1);
+
+  /*for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)
     {
@@ -158,7 +191,7 @@ int main(int argc, char *argv[])
       printf("\n");
     }
     printf("\n");
-  }
+  }*/
 
   /*for(i = 1; i <= z+1; i++)
   {
