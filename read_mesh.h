@@ -40,5 +40,6 @@ void calculate_centroid(meshdata *m);
 double determinant(double *a, double *b, double *c, double *d);
 int inside(int numtet, int *elements, double *nodes, double point_x, double point_y, double point_z);
 void init_cube_grid(cube *c, meshdata *m);
+void init_cube_grid_mpi(cube *c, meshdata *m);
 
 #endif

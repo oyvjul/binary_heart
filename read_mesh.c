@@ -325,6 +325,40 @@ void init_cube_grid(cube *c, meshdata *m)
   }
 }
 
+void init_cube_grid_mpi(cube *c, meshdata *m)
+{
+  int i, j, k;
+  double x_max;
+  double x_min;
+  double y_max;
+  double y_min;
+  double z_max;
+  double z_min;
+  readmesh("mesh_new/3Dheart.1", m);
+  compute_minmax(&x_max, &x_min, &y_max, &y_min, &z_max, &z_min, m);
+
+  c->x_step = (x_max - x_min)/(double)c->x;
+  c->y_step = (y_max - y_min)/(double)c->y;
+  c->z_step = (z_max - z_min)/(double)c->z;
+
+  //printf("x_max: %f \t x_min: %f \t y_max: %f \t y_min: %f \t z_max: %f \t z_min: %f\n", x_max, x_min, y_max, y_min, z_max, z_min);
+
+  /*for(i = 1; i <= c->nx+1; i++)
+  {
+    c->grid_x[i] = x_min + c->x_step*(i-1);
+  }
+
+  for(i = 1; i <= c->ny+1; i++)
+  {
+    c->grid_y[i] = y_min + c->y_step*(i-1);
+  }
+
+  for(i = 1; i <= c->nz+1; i++)
+  {
+    c->grid_z[i] = z_min + c->z_step*(i-1);
+  }*/
+}
+
 /*int main(int argc, char *argv[])
 {
   int i, j, k, l, mn, ii, jj, kk;

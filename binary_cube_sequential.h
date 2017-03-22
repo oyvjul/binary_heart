@@ -15,6 +15,13 @@ typedef struct
   double ***tensor_z0;
   double ***tensor_z1;
 
+  double ***tensor_val_11;
+  double ***tensor_val_12;
+  double ***tensor_val_13;
+  double ***tensor_val_22;
+  double ***tensor_val_23;
+  double ***tensor_val_33;
+
   double *grid_x;
   double *grid_y;
   double *grid_z;
@@ -26,6 +33,10 @@ typedef struct
   int x;
   int y;
   int z;
+  int nx;
+  int ny;
+  int nz;
+  int x0, x1, y0, y1, z0, z1;
 }cube;
 
 double ***dallocate_3d(int x, int y, int z);
