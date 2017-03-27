@@ -188,21 +188,16 @@ void generate_tensor(cube *c,tensorfield* T, meshdata *m)
     {
       for(k = 1; k <= c->x; k++)
       {
-        //is_inside = inside(&m, grid[i*x*y+j*x+k].x, grid[i*x*y+j*x+k].y, grid[i*x*y+j*x+k].z);
-        c->grid_x[k] = c->grid_x[k]+(c->x_step/2);
-        c->grid_y[j] = c->grid_y[j]+(c->y_step/2);
-        c->grid_z[i] = c->grid_z[i]+(c->z_step/2);
-
-        is_inside = inside(m->numtet, m->elements, m->nodes, c->grid_x[k], c->grid_y[j], c->grid_z[i]);
+        is_inside = inside(m->numtet, m->elements, m->nodes, c->center_x[k], c->center_y[j], c->center_z[i]);
 
         if(is_inside == 1)
         {
           norm = 0.0;
           for(l = 0; l < T->numtensor; l++)
           {
-            d = (c->grid_x[k]-T->coord[l*3+0])*(c->grid_x[k]-T->coord[l*3+0])+
-                (c->grid_y[j]-T->coord[l*3+1])*(c->grid_y[j]-T->coord[l*3+1])+
-                (c->grid_z[i]-T->coord[l*3+2])*(c->grid_z[i]-T->coord[l*3+2]);
+            d = (c->center_x[k]-T->coord[l*3+0])*(c->center_x[k]-T->coord[l*3+0])+
+                (c->center_y[j]-T->coord[l*3+1])*(c->center_y[j]-T->coord[l*3+1])+
+                (c->center_z[i]-T->coord[l*3+2])*(c->center_z[i]-T->coord[l*3+2]);
 
             e = exp(lambda*d);
             norm += e;

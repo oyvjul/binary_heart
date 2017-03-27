@@ -20,7 +20,7 @@ double flux_upper_right_one(double ***u, double tensor_x, double tensor_y, doubl
   return ((tensor_x*cell_direction_x) + (tensor_y*cell_direction_y) + (tensor_z*cell_direction_z));
 }
 
-//(i+1/2, j+1/2, k-1/2)
+//(i+1/2, j+1/2, k-1/2)//DONE
 double flux_upper_right(double ***u, double tensor_x, double tensor_y, double tensor_z,
                         double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
@@ -36,7 +36,7 @@ double flux_upper_right(double ***u, double tensor_x, double tensor_y, double te
   return (tensor_x*cell_direction_x) + (tensor_y*cell_direction_y) + (tensor_z*cell_direction_z);
 }
 
-//(i+1/2, j-1/2, k-1/2)
+//(i+1/2, j-1/2, k-1/2)//DONE
 double flux_lower_right(double ***u, double tensor_x, double tensor_y, double tensor_z,
                         double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
@@ -52,7 +52,7 @@ double flux_lower_right(double ***u, double tensor_x, double tensor_y, double te
   return (tensor_x*cell_direction_x) + (tensor_y*cell_direction_y) + (tensor_z*cell_direction_z);
 }
 
-//(i+1/2, j-1/2, k+1/2)
+//(i+1/2, j-1/2, k+1/2)//DONE
 double flux_lower_right_one(double ***u, double tensor_x, double tensor_y, double tensor_z,
                             double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
@@ -68,7 +68,7 @@ double flux_lower_right_one(double ***u, double tensor_x, double tensor_y, doubl
   return (tensor_x*cell_direction_x) + (tensor_y*cell_direction_y) + (tensor_z*cell_direction_z);
 }
 
-//(i-1/2, j+1/2, k+1/2)
+//(i-1/2, j+1/2, k+1/2)//DONE
 double flux_upper_left_one(double ***u, double tensor_x, double tensor_y, double tensor_z,
                            double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
@@ -84,7 +84,7 @@ double flux_upper_left_one(double ***u, double tensor_x, double tensor_y, double
   return (tensor_x*cell_direction_x) + (tensor_y*cell_direction_y) + (tensor_z*cell_direction_z);
 }
 
-//(i-1/2, j+1/2, k-1/2)
+//(i-1/2, j+1/2, k-1/2)//DONE
 double flux_upper_left(double ***u, double tensor_x, double tensor_y, double tensor_z,
                        double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {
@@ -100,7 +100,7 @@ double flux_upper_left(double ***u, double tensor_x, double tensor_y, double ten
   return (tensor_x*cell_direction_x) + (tensor_y*cell_direction_y) + (tensor_z*cell_direction_z);
 }
 
-//(i-1/2, j-1/2, k+1/2)
+//(i-1/2, j-1/2, k+1/2)//DONE
 double flux_lower_left_one(double ***u, double tensor_x, double tensor_y, double tensor_z,
                            double delta_x, double delta_y, double delta_z, int i, int j, int k)
 {

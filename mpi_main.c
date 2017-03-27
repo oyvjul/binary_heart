@@ -32,10 +32,18 @@ void init_sequential_data(cube *c, int x, int y, int z)
   c->z = z;
 }
 
-void free_sequential_data(double ***tensor)
+void free_sequential_data(double ***tensor, cube *c)
 {
-  free(tensor[0][0]);
+  int i, j;
+  /*free(tensor[0][0]);
   free(tensor[0]);
+  free(tensor);*/
+  free(tensor[0][0]);
+  for(i = 0; i <= c->z+2; i++)
+  {
+    free(tensor[i]);
+  }
+
   free(tensor);
 }
 
@@ -83,8 +91,8 @@ void decompose(int n, int dim, int coord, int* start, int* end)
 int main(int argc, char *argv[])
 {
   int x = 10;
-  int y = 10;
-  int z = 10;
+  int y = 8;
+  int z = 5;
   double count = 1.0;
   int i, j, k;
   int ii, jj, kk;
@@ -106,40 +114,55 @@ int main(int argc, char *argv[])
   init_sequential_data(c, x, y, z);
   init_cube_grid_mpi(c, m);
 
-  /*read_binaryformat("mesh_new/tensor_x0.tensor", &c->tensor_x0, x+3, y+3, z+3);
+  read_binaryformat("mesh_new/tensor_x0.tensor", &c->tensor_x0, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_x1.tensor", &c->tensor_x1, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_y0.tensor", &c->tensor_y0, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_y1.tensor", &c->tensor_y1, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_z0.tensor", &c->tensor_z0, x+3, y+3, z+3);
-  read_binaryformat("mesh_new/tensor_z1.tensor", &c->tensor_z1, x+3, y+3, z+3);*/
+  read_binaryformat("mesh_new/tensor_z1.tensor", &c->tensor_z1, x+3, y+3, z+3);
 
 
-  for(i = 1; i <= c->z+1; i++)
+  /*for(i = 1; i <= c->z+1; i++)
   {
     for(j = 1; j <= c->y+1; j++)
     {
       for(k = 1; k <= c->x+1; k++)
       {
         c->tensor_x0[i][j][k] = count;
+        c->tensor_x1[i][j][k] = count;
+        c->tensor_y0[i][j][k] = count;
+        c->tensor_y1[i][j][k] = count;
+        c->tensor_z0[i][j][k] = count;
+        c->tensor_z1[i][j][k] = count;
         count++;
       }
     }
   }
 
+  free_sequential_data(c->tensor_x0, c);
+  free_sequential_data(c->tensor_x1, c);
+  free_sequential_data(c->tensor_y0, c);
+  free_sequential_data(c->tensor_y1, c);
+  free_sequential_data(c->tensor_z0, c);
+  free_sequential_data(c->tensor_z1, c);*/
+
   //init_data(c, x, y, z);
 
-  for(i = 1; i <= z+1; i++)
+  /*for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)
     {
       for(k = 1; k <= x+1; k++)
       {
-        printf("%f ", c->tensor_x0[i][j][k]);
+        //c->tensor_x0[i][j][k] = 1;
+        //printf("%f ", c->tensor_x0[i][j][k]);
+        //test[k] = 3;
+        //printf("%d ", test[k]);
       }
       printf("\n");
     }
     printf("\n");
-  }
+  }*/
 
 
   //read_cubemesh(c, "mesh_new/128x128x128.txt");

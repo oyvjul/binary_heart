@@ -26,6 +26,10 @@ typedef struct
   double *grid_y;
   double *grid_z;
 
+  double *center_x;
+  double *center_y;
+  double *center_z;
+
   double x_step;
   double y_step;
   double z_step;

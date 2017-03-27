@@ -312,7 +312,9 @@ void init_cube_grid(cube *c, meshdata *m)
   for(i = 1; i <= c->x+1; i++)
   {
     c->grid_x[i] = x_min + c->x_step*(i-1);
+    //printf("%f ", c->grid_x[i]);
   }
+  //printf("\n");
 
   for(i = 1; i <= c->y+1; i++)
   {
@@ -322,6 +324,23 @@ void init_cube_grid(cube *c, meshdata *m)
   for(i = 1; i <= c->z+1; i++)
   {
     c->grid_z[i] = z_min + c->z_step*(i-1);
+  }
+
+  for(i = 1; i <= c->x; i++)
+  {
+    c->center_x[i] = c->grid_x[i]+(c->x_step/2);
+    //c->center_x[i] = (c->grid_x[i]+c->grid_x[i+1])/2;
+    //printf("%f ", c->center_x[i]);
+  }
+
+  for(i = 1; i <= c->y; i++)
+  {
+    c->center_y[i] = c->grid_y[i]+(c->y_step/2);
+  }
+
+  for(i = 1; i <= c->z; i++)
+  {
+    c->center_z[i] = c->grid_z[i]+(c->z_step/2);
   }
 }
 

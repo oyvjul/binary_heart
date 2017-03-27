@@ -5,6 +5,32 @@
 #include "io.h"
 #include "diffusion.h"
 #include "omp.h"
+#include "math.h"
+
+void init_sequential_data(cube *c, int x, int y, int z)
+{
+  c->tensor_x0 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_x0, x+3, y+3, z+3);
+
+  c->tensor_x1 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_x1, x+3, y+3, z+3);
+
+  c->tensor_y0 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_y0, x+3, y+3, z+3);
+
+  c->tensor_y1 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_y1, x+3, y+3, z+3);
+
+  c->tensor_z0 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_z0, x+3, y+3, z+3);
+
+  c->tensor_z1 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_z1, x+3, y+3, z+3);
+
+  c->x = x;
+  c->y = y;
+  c->z = z;
+}
 
 int main(int argc, char *argv[])
 {
@@ -84,17 +110,20 @@ int main(int argc, char *argv[])
     //read_binaryformat("mesh_new/test.tensor", &c->tensor_x0, &x+3, &y+3, &z+3);
   #else
 
-  for(i = 1; i <= z; i++)
+  /*double W = 2.0;
+  double pi =  3.14159265358979323846;
+  for(i = 1; i <= z+1; i++)
   {
-    for(j = 1; j <= y; j++)
+    for(j = 1; j <= y+1; j++)
     {
-      for(k = 1; k <= x; k++)
+      for(k = 1; k <= x+1; k++)
       {
-        c->u_old[i][j][k] = count;
+        c->u_old[i][j][k] = W;
+        c->tensor_x0[i][j][k] = 0.1;
         count++;
       }
     }
-  }
+  }*/
 
   /*for(i = 1; i <= z+1; i++)
   {
@@ -107,7 +136,7 @@ int main(int argc, char *argv[])
     }
   }*/
   //write_binaryformat("mesh_new/test.tensor", c->u_old, x+3, y+3, z+3);
-  read_binaryformat("mesh_new/tensor_x0.tensor", &c->tensor_x0, x+3, y+3, z+3);
+  //read_binaryformat("mesh_new/tensor_x0.tensor", &c->tensor_x0, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_x1.tensor", &c->tensor_x1, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_y0.tensor", &c->tensor_y0, x+3, y+3, z+3);
   read_binaryformat("mesh_new/tensor_y1.tensor", &c->tensor_y1, x+3, y+3, z+3);
@@ -126,8 +155,11 @@ int main(int argc, char *argv[])
     }
     printf("\n");
   }*/
+  int kx = 0.5;
+
+  //exp(-t*3*W*W*pi*pi*k)*cos(pi*x*W)*cos(pi*y*W)*cos(pi*z*W);
   double start1 = omp_get_wtime();
-  for(int l = 0; l < 40; l++)
+  for(int l = 1; l <= 2; l++)
   {
   for(i = 1; i <= z+1; i++)
   {
@@ -135,9 +167,17 @@ int main(int argc, char *argv[])
     {
       for(k = 1; k <= x+1; k++)
       {
-        c->u_new[i][j][k] = divergence_cell_direction_x(c->u_old, c->tensor_x0[i][j][k], c->tensor_x1[i][j][k], c->tensor_y0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k)
+        /*c->u_new[i][j][k] = divergence_cell_direction_x(c->u_old, c->tensor_x0[i][j][k], c->tensor_x1[i][j][k], c->tensor_y0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k)
                           + divergence_cell_direction_y(c->u_old, c->tensor_x1[i][j][k], c->tensor_y1[i][j][k], c->tensor_z0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k)
-                          + divergence_cell_direction_x(c->u_old, c->tensor_y0[i][j][k], c->tensor_z0[i][j][k], c->tensor_z1[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k);
+                          + divergence_cell_direction_x(c->u_old, c->tensor_y0[i][j][k], c->tensor_z0[i][j][k], c->tensor_z1[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k);*/
+
+        /*c->u_new[i][j][k] = c->u_old[i][j][k] + (1*(divergence_cell_direction_x(c->u_old, c->tensor_x0[i][j][k], 0, 0, 1, 1, 1, i, j, k)
+                          + divergence_cell_direction_y(c->u_old, 0, c->tensor_x0[i][j][k], 0, 1, 1, 1, i, j, k)
+                          + divergence_cell_direction_x(c->u_old, 0, 0, c->tensor_x0[i][j][k], 1, 1, 1, i, j, k)));*/
+
+        c->u_new[i][j][k] =  ((divergence_cell_direction_x(c->u_old, c->tensor_x0[i][j][k], 0, 0, c->x_step, c->y_step, c->y_step, i, j, k)
+                            + divergence_cell_direction_y(c->u_old, 0, c->tensor_x0[i][j][k], 0, c->x_step, c->y_step, c->y_step, i, j, k)
+                            + divergence_cell_direction_x(c->u_old, 0, 0, c->tensor_x0[i][j][k], c->x_step, c->y_step, c->y_step, i, j, k)));
       }
     }
   }
@@ -177,22 +217,51 @@ temp = c->u_old;
 c->u_old = c->u_new;
 c->u_new = temp;
 }*/
-  double end1 = omp_get_wtime();
-  printf("it took: %0.12f", end1-start1);
+  double ***debug;
+  debug = dallocate_3d(c->x+3, c->y+3, c->z+3);
+  dinit_3d(debug, c->x+3, c->y+3, c->z+3);
+  //double pi =  3.14159265358979323846;
 
-  /*for(i = 1; i <= z+1; i++)
+  double end1 = omp_get_wtime();
+  printf("it took: %0.12f \n", end1-start1);
+  double test;
+
+  for(int l = 1; l <= 1; l++)
   {
-    for(j = 1; j <= y+1; j++)
+    for(i = 1; i <= z+1; i++)
     {
-      for(k = 1; k <= x+1; k++)
+      for(j = 1; j <= y+1; j++)
       {
-        printf("%f ", c->u_new[i][j][k]);
+        for(k = 1; k <= x+1; k++)
+        {
+          double x_coord = c->grid_x[k]+(c->x_step/2);
+          double y_coord = c->grid_y[j]+(c->y_step/2);
+          double z_coord = c->grid_z[i]+(c->z_step/2);
+          debug[i][j][k] = exp(-0.1*3*W*W*pi*pi*0.2)*cos(pi*x_coord*W)*cos(pi*y_coord*W)*cos(pi*z_coord*W);
+          //printf("%f ", test);
+          //printf("%f ", c->u_old[i][j][k]);
+        }
+        //printf("\n");
+      }
+      //printf("\n");
+    }
+  }
+
+  for(i = 0; i <= 3; i++)
+  {
+    for(j = 0; j <= y+2; j++)
+    {
+      for(k = 0; k <= x+2; k++)
+      {
+        //debug[i][j][k] = exp(-l*3*W*W*pi*pi*c->tensor_x0[i][j][k])*cos(pi*x*W)*cos(pi*y*W)*cos(pi*z*W);
+        //printf("%f ", debug[i][j][k]);
+        printf("%f ", c->u_old[i][j][k]);
       }
       printf("\n");
     }
     printf("\n");
-  }*/
-
+  }
+    //p
   /*for(i = 1; i <= z+1; i++)
   {
     for(j = 1; j <= y+1; j++)

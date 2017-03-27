@@ -71,6 +71,10 @@ void init_cubedata(cube *c, int x, int y, int z)
   c->grid_y = (double*)calloc(y+2, sizeof(double));
   c->grid_z = (double*)calloc(z+2, sizeof(double));
 
+  c->center_x = (double*)calloc(x+2, sizeof(double));
+  c->center_y = (double*)calloc(y+2, sizeof(double));
+  c->center_z = (double*)calloc(z+2, sizeof(double));
+
   c->x = x;
   c->y = y;
   c->z = z;
