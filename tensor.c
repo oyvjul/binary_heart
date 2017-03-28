@@ -14,6 +14,7 @@ void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip)
     FILE *fpdata;
     double dump;
     int err;
+    int i, j;
     strcpy(fname,tensorfile);
     strcpy(suffix,".fibers");
     strcat(fname,suffix);
@@ -29,14 +30,14 @@ void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip)
     T->coord = (double*)malloc(3*T->numtensor*sizeof(double));
     T->fibers = (double*)malloc(3*T->numtensor*sizeof(double));
     int pos=0;
-    for (int i = 0; i < T->numtensor; i++)
+    for (i = 0; i < T->numtensor; i++)
     {
         if(pos<total)
-        for(int j=0;j<3;j++)
+        for(j=0;j<3;j++)
             err = fscanf(fpdata, "%lf", &T->fibers[i*3+j]);
         else
             break;
-        for(int j=0;j<3;j++)
+        for(j=0;j<3;j++)
             err = fscanf(fpdata, "%lf", &dump);
 
     }
@@ -52,14 +53,14 @@ void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip)
         exit(0);
     }
     pos=0;
-    for (int i = 0; i < T->numtensor; i++)
+    for (i = 0; i < T->numtensor; i++)
     {
         if(pos<total)
-        for(int j=0;j<3;j++)
+        for(j=0;j<3;j++)
             err = fscanf(fpdata, "%lf", &T->coord[i*3+j]);
         else
             break;
-        for(int j=0;j<3;j++)
+        for(j=0;j<3;j++)
             err = fscanf(fpdata, "%lf", &dump);
     }
     fclose(fpdata);
@@ -70,6 +71,7 @@ void sparse_readtensorfiles(char* tensorfile,tensorfield* T,int skip)
 
 void fiberstotensors(tensorfield* T)
 {
+  int i, j;
     //nonzeroes on main diagonal
     // +3: (1,2) , (2,1)
     // +4: (1,3) , (3,1)
@@ -77,9 +79,9 @@ void fiberstotensors(tensorfield* T)
 
     //double start=omp_get_wtime();
     T->inputtensor = (double*)malloc(6*T->numtensor*sizeof(double));
-    for (int i = 0; i < T->numtensor; i++)
+    for (i = 0; i < T->numtensor; i++)
     {
-        for(int j=0;j<3;j++)
+        for(j=0;j<3;j++)
           T->inputtensor[i*6+j]=((SIGMA_l-SIGMA_t)*T->fibers[i*3+j]*T->fibers[i*3+j])+SIGMA_t;
 
       T->inputtensor[i*6+3]=((SIGMA_l-SIGMA_t)*T->fibers[i*3+0]*T->fibers[i*3+1]);

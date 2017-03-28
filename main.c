@@ -7,88 +7,15 @@
 #include "omp.h"
 #include "math.h"
 
-double ***dallocate_3d(int x, int y, int z)
-{
-  int i, j;
-  double *storage = (double*)malloc(x * y * z * sizeof(*storage));
-  double *alloc = storage;
-  double ***matrix;
-  matrix = (double***)malloc(z * sizeof(double**));
-
-  for (i = 0; i < z; i++)
-  {
-    matrix[i] = (double**)malloc(y * sizeof(**matrix));
-
-    for (j = 0; j < y; j++)
-    {
-      matrix[i][j] = alloc;
-      alloc += x;
-    }
-  }
-
-  return matrix;
-}
-
-void dinit_3d(double*** matrix, int x, int y, int z)
-{
-  int i, j, k;
-
-  for(i = 0; i < z; i++)
-  {
-    for(j = 0; j < y; j++)
-    {
-      for(k = 0; k < x; k++)
-      {
-        matrix[i][j][k] = 0.0;
-      }
-    }
-  }
-}
-
-void init_sequential_data(cube *c, int x, int y, int z)
-{
-  c->u_old = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->u_old, x+3, y+3, z+3);
-
-  c->u_new = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->u_new, x+3, y+3, z+3);
-
-  c->tensor_x0 = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->tensor_x0, x+3, y+3, z+3);
-
-  c->tensor_x1 = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->tensor_x1, x+3, y+3, z+3);
-
-  c->tensor_y0 = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->tensor_y0, x+3, y+3, z+3);
-
-  c->tensor_y1 = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->tensor_y1, x+3, y+3, z+3);
-
-  c->tensor_z0 = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->tensor_z0, x+3, y+3, z+3);
-
-  c->tensor_z1 = dallocate_3d(x+3, y+3, z+3);
-  dinit_3d(c->tensor_z1, x+3, y+3, z+3);
-
-  c->grid_x = (double*)calloc(x+2, sizeof(double));
-  c->grid_y = (double*)calloc(y+2, sizeof(double));
-  c->grid_z = (double*)calloc(z+2, sizeof(double));
-
-  c->center_x = (double*)calloc(x+2, sizeof(double));
-  c->center_y = (double*)calloc(y+2, sizeof(double));
-  c->center_z = (double*)calloc(z+2, sizeof(double));
-
-  c->x = x;
-  c->y = y;
-  c->z = z;
-}
+double ***dallocate_3d(int x, int y, int z);
+void dinit_3d(double*** matrix, int x, int y, int z);
+void init_sequential_data(cube *c, int x, int y, int z);
 
 int main(int argc, char *argv[])
 {
-  int x = 10;
-  int y = 10;
-  int z = 10;
+  int x = 64;
+  int y = 64;
+  int z = 64;
   double count = 1.0;
   int i, j, k;
   int count_inside, count_outside;
@@ -153,12 +80,12 @@ int main(int argc, char *argv[])
       printf("\n");
     }*/
 
-    write_binaryformat("mesh_new/tensor_x0.tensor", c->tensor_x0, x+3, y+3, z+3);
-    write_binaryformat("mesh_new/tensor_x1.tensor", c->tensor_x1, x+3, y+3, z+3);
-    write_binaryformat("mesh_new/tensor_y0.tensor", c->tensor_y0, x+3, y+3, z+3);
-    write_binaryformat("mesh_new/tensor_y1.tensor", c->tensor_y1, x+3, y+3, z+3);
-    write_binaryformat("mesh_new/tensor_z0.tensor", c->tensor_z0, x+3, y+3, z+3);
-    write_binaryformat("mesh_new/tensor_z1.tensor", c->tensor_z1, x+3, y+3, z+3);
+    write_binaryformat("mesh_new/tensor_val11.tensor", c->tensor_x0, x+3, y+3, z+3);
+    write_binaryformat("mesh_new/tensor_val12.tensor", c->tensor_x1, x+3, y+3, z+3);
+    write_binaryformat("mesh_new/tensor_val13.tensor", c->tensor_y0, x+3, y+3, z+3);
+    write_binaryformat("mesh_new/tensor_val22.tensor", c->tensor_y1, x+3, y+3, z+3);
+    write_binaryformat("mesh_new/tensor_val23.tensor", c->tensor_z0, x+3, y+3, z+3);
+    write_binaryformat("mesh_new/tensor_val33.tensor", c->tensor_z1, x+3, y+3, z+3);
     //read_binaryformat("mesh_new/test.tensor", &c->tensor_x0, &x+3, &y+3, &z+3);
   #else
 
@@ -364,4 +291,81 @@ c->u_new = temp;
   #endif
 
   return 0;
+}
+
+double ***dallocate_3d(int x, int y, int z)
+{
+  int i, j;
+  double *storage = (double*)malloc(x * y * z * sizeof(*storage));
+  double *alloc = storage;
+  double ***matrix;
+  matrix = (double***)malloc(z * sizeof(double**));
+
+  for (i = 0; i < z; i++)
+  {
+    matrix[i] = (double**)malloc(y * sizeof(**matrix));
+
+    for (j = 0; j < y; j++)
+    {
+      matrix[i][j] = alloc;
+      alloc += x;
+    }
+  }
+
+  return matrix;
+}
+
+void dinit_3d(double*** matrix, int x, int y, int z)
+{
+  int i, j, k;
+
+  for(i = 0; i < z; i++)
+  {
+    for(j = 0; j < y; j++)
+    {
+      for(k = 0; k < x; k++)
+      {
+        matrix[i][j][k] = 0.0;
+      }
+    }
+  }
+}
+
+void init_sequential_data(cube *c, int x, int y, int z)
+{
+  c->u_old = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->u_old, x+3, y+3, z+3);
+
+  c->u_new = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->u_new, x+3, y+3, z+3);
+
+  c->tensor_x0 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_x0, x+3, y+3, z+3);
+
+  c->tensor_x1 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_x1, x+3, y+3, z+3);
+
+  c->tensor_y0 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_y0, x+3, y+3, z+3);
+
+  c->tensor_y1 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_y1, x+3, y+3, z+3);
+
+  c->tensor_z0 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_z0, x+3, y+3, z+3);
+
+  c->tensor_z1 = dallocate_3d(x+3, y+3, z+3);
+  dinit_3d(c->tensor_z1, x+3, y+3, z+3);
+
+  c->grid_x = (double*)calloc(x+2, sizeof(double));
+  c->grid_y = (double*)calloc(y+2, sizeof(double));
+  c->grid_z = (double*)calloc(z+2, sizeof(double));
+
+  c->center_x = (double*)calloc(x+2, sizeof(double));
+  c->center_y = (double*)calloc(y+2, sizeof(double));
+  c->center_z = (double*)calloc(z+2, sizeof(double));
+
+  c->x = x;
+  c->y = y;
+  c->z = z;
 }
